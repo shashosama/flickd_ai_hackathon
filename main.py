@@ -1,13 +1,13 @@
-import os
-import cv2
-from pathlib import Path
-from PIL import Image
-import faiss
-import numpy as np
+import os                   
+import cv2                
+from pathlib import Path    
+from PIL import Image      
+import faiss               
+import numpy as np         
 
 from utils.frame_extractor import extract_frames
 from models.yolo_detector import detect_fashion_items
-from models.clip_matcher import embed_image, find_best_match
+from models.clip_matcher import embed_image, find_best_match 
 from models.vibe_classifier import classify_vibe
 
 def run_pipeline(video_id, video_path, caption):

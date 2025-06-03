@@ -3,10 +3,10 @@ autopep8
 Flask==3.0.3
 gunicorn==22.0.0
 Werkzeug==3.0.6
-flask
-opencv-python
-torch
-transformers
-Pillow
 faiss-cpu
+opencv-python
 ultralytics
+transformers
+torch
+Pillow
+requests

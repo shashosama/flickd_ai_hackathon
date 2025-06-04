@@ -5,6 +5,7 @@ from pathlib import Path   #for lisiting files in directories
 from PIL import Image      #for image processing
 import faiss               #for fast similarity search 
 import numpy as np         #for math with vector 
+import pickle
 
 #importing helper functions from your project 
 from utils.frame_extractor import extract_frames             #extracts keyframes from video 

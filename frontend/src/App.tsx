@@ -32,7 +32,7 @@ function App() {
 
   return (
     <div style={{ padding: 40, fontFamily: 'Arial' }}>
-      <h2>🎥 Upload a Video</h2>
+      <h2> Upload a Video</h2>
       <input type="file" accept="video/mp4" onChange={handleFileChange} />
       <button onClick={handleUpload} disabled={!file || loading} style={{ marginLeft: 10 }}>
         {loading ? 'Uploading...' : 'Upload'}

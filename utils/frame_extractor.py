@@ -1,6 +1,6 @@
 import cv2
 import os
-from utils.frame_extractor import extract_frames
+
 # importing these to process video and hep with folder creation and file path handling
 
 

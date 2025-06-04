@@ -1,0 +1,20 @@
+services:
+  - type: web
+    name: flickd-backend
+    env: python
+    plan: free
+    buildCommand: pip install -r requirements.txt
+    startCommand: gunicorn app:app
+    envVars:
+      - key: PYTHON_VERSION
+        value: 3.11
+
+  - type: web
+    name: flickd-frontend
+    env: static
+    plan: free
+    buildCommand: cd flickd-frontend && npm install && npm run build
+    staticPublishPath: flickd-frontend/dist
+    envVars:
+      - key: NODE_VERSION
+        value: 20

@@ -1,0 +1,25 @@
+from flask import Flask, request, render_template, jsonify
+from werkzeug.utils import secure_filename
+import os
+
+app = Flask(__name__)
+UPLOAD_FOLDER = 'uploads'
+os.makedirs(UPLOAD_FOLDER, exist_ok=True)
+
+@app.route('/', methods=['GET'])
+def home():
+    return render_template('index.html')
+
+@app.route('/upload', methods=['POST'])
+def upload_video():
+    video = request.files['file']
+    if video:
+        filename = secure_filename(video.filename)
+        path = os.path.join(UPLOAD_FOLDER, filename)
+        video.save(path)
+        # run your video + CLIP + YOLO pipeline here
+        return jsonify({"status": "success", "file": filename})
+    return jsonify({"status": "failed"})
+
+if __name__ == '__main__':
+    app.run(debug=True)

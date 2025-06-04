@@ -1,6 +1,11 @@
 from flask import Flask, request, render_template, jsonify
 from werkzeug.utils import secure_filename
 import os
+from utils.frame_extractor import extract_frames
+from models.yolo_detector import detect_fashion_items
+from models.clip_matcher import embed_image, find_best_match
+from models.vibe_classifier import classify_vibe
+
 
 app = Flask(__name__)
 UPLOAD_FOLDER = 'uploads'

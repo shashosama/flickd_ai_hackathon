@@ -6,6 +6,7 @@ import cv2
 app = Flask(__name__)
 UPLOAD_FOLDER = 'uploads'
 os.makedirs(UPLOAD_FOLDER, exist_ok=True)
+app.config['UPLOAD_FOLDER'] = UPLOAD_FOLDER
 
 def extract_frames(video_path, output_folder, max_frames=5):
     cap = cv2.VideoCapture(video_path)
@@ -16,7 +17,8 @@ def extract_frames(video_path, output_folder, max_frames=5):
         ret, frame = cap.read()
         if not ret:
             break
-        frame_path = os.path.join(output_folder, f'frame_{frame_count}.jpg')
+        frame_filename = f'frame_{frame_count}.jpg'
+        frame_path = os.path.join(output_folder, frame_filename)
         cv2.imwrite(frame_path, frame)
         saved_paths.append(frame_path)
         frame_count += 1
@@ -30,19 +32,24 @@ def home():
 
 @app.route('/upload', methods=['POST'])
 def upload_video():
-    video = request.files.get('file')
-    if video:
+    if 'file' not in request.files:
+        return jsonify({"status": "failed", "message": "No file part in request."}), 400
+
+    video = request.files['file']
+    if video.filename == '':
+        return jsonify({"status": "failed", "message": "No selected file."}), 400
+
+    try:
         filename = secure_filename(video.filename)
-        video_path = os.path.join(UPLOAD_FOLDER, filename)
+        video_path = os.path.join(app.config['UPLOAD_FOLDER'], filename)
         video.save(video_path)
 
-        frame_paths = extract_frames(video_path, UPLOAD_FOLDER)
+        frame_paths = extract_frames(video_path, app.config['UPLOAD_FOLDER'])
 
-        # Simulate fashion tag + vibe prediction
         results = [
             {
                 "frame": os.path.basename(p),
-                "fashion_item": "mock_item_" + str(i),
+                "fashion_item": f"mock_item_{i}",
                 "vibe": "casual" if i % 2 == 0 else "edgy"
             }
             for i, p in enumerate(frame_paths)
@@ -50,7 +57,8 @@ def upload_video():
 
         return jsonify({"status": "success", "results": results})
 
-    return jsonify({"status": "failed", "message": "No file uploaded."})
+    except Exception as e:
+        return jsonify({"status": "error", "message": str(e)}), 500
 
 if __name__ == '__main__':
     app.run(debug=True)

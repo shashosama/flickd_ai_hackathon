@@ -18,9 +18,9 @@ def run_pipeline(video_id, video_path, caption):     #the function runs your ful
     extract_frames(video_path, frame_dir)   #Extracts frames from video 
 
     # Load FAISS index + product IDs
-    index = faiss.read_index("data/faiss_index.bin")
-    with open("data/product_ids.txt") as f:
-        product_ids = f.read().splitlines() # loads the saved product database (faiss) and the list of product IDs
+    index = faiss.read_index("data/clip_index.faiss")
+    with open("faiss_index/product_ids.pkl", "rb") as f:
+         product_ids = pickle.load(f) # loads the saved product database (faiss) and the list of product IDs
 
     products = [] #this will store the result for each detected product
     for frame_file in Path(frame_dir).glob("*.jpg"):

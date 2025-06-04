@@ -15,13 +15,13 @@ def extract_frames(video_path, output_folder, frame_rate=1):
 
     count, frame_id = 0, 0 
     #count= total frames read so far , frame_id = number of saved frames 
-    while True:
-        success, frame = vidcap.read()
+while True:
+    success, frame = vidcap.read()
         #reads each frame of the video 
         #if no frame is left , break the loop
-        if not success:
+    if not success:
             break
-        if count % interval == 0:
+    if count % interval == 0:
             #save every interval-th frame 
             filename = os.path.join(output_folder, f"frame_{frame_id:03d}.jpg")
             #builds the output file name like : frame_000 , or frame_001
@@ -31,5 +31,6 @@ def extract_frames(video_path, output_folder, frame_rate=1):
             #increments the frame save counter 
             count += 1
             #increment the total frame read counter 
-            vidcap.release()
+
+vidcap.release()
             #release the video file 

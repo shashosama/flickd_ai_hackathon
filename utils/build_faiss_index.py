@@ -5,7 +5,7 @@ import numpy as np                          #for working with arrays of numbers
 import faiss                                #fast library to search for similar images 
 from models.clip_matcher import embed_image # Function to turn image into a CLIP vector
 
-def build_index(csv_path="data/product_catalog.csv"):
+def build_index(csv_path="data/catalog.csv"):
     df = pd.read_csv(csv_path)                      #define a function to create a FAISS index from the product catalog CSV 
     product_ids = df["product_id"].tolist()         #Get a list of all product IDS
     embeddings = []                                 #This will store the number-code for each image

@@ -2,6 +2,7 @@ from flask import Flask, request, jsonify
 from werkzeug.utils import secure_filename
 import os
 import cv2
+from main import run_pipeline
 
 app = Flask(__name__)
 UPLOAD_FOLDER = 'uploads'

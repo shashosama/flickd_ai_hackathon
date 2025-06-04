@@ -1,20 +1,9 @@
 services:
   - type: web
-    name: flickd-backend
+    name: fashion-ai-api
     env: python
-    region: oregon
-    plan: free
-    buildCommand: "pip install -r requirements.txt"
-    startCommand: "gunicorn app:app"
+    buildCommand: pip install -r requirements.txt
+    startCommand: gunicorn app:app
     envVars:
-      - key: FLASK_ENV
-        value: production
-
-  - type: web
-    name: flickd-frontend
-    env: static
-    buildCommand: "npm install && npm run build"
-    staticPublishPath: dist
-    buildFilter:
-      paths:
-        - frontend/**
+      - key: PYTHON_VERSION
+        value: 3.10.13

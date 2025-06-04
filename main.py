@@ -1,4 +1,5 @@
-import os                   
+import os
+import json                  
 import cv2                 #for reading images as arrays  
 from pathlib import Path   #for lisiting files in directories
 from PIL import Image      #for image processing
@@ -40,6 +41,8 @@ def run_pipeline(video_id, video_path, caption):     #the function runs your ful
             #turns the cropped image into a vector (clip embedding)
             match_type, prod_id, score = find_best_match(emb, index, product_ids)
             #Use FAISS to find the most similar product in the catalog 
+            if score < 0.75:
+                continue
 
             products.append({
                 "type": det["class"],
@@ -66,6 +69,6 @@ if __name__ == "__main__":
         caption="Feeling super Y2K and coquette with this new dress"
     )
     #runs the pipeline on a test video and saves the output to outputs/test01.json
-    import json
+    
     with open("outputs/test01.json", "w") as f:
         json.dump(result, f, indent=2)

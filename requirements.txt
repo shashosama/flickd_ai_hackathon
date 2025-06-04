@@ -1,8 +1,7 @@
 flask
 ultralytics==8.3.149
 transformers
-torch==2.1.2+cpu -f https://download.pytorch.org/whl/torch_stable.html
-opencv-python
+torch
 Pillow
 faiss-cpu
 numpy

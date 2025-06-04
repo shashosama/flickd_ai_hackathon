@@ -1,49 +1,56 @@
 from flask import Flask, request, jsonify
 from werkzeug.utils import secure_filename
 import os
-
-from utils.frame_extractor import extract_frames
-from models.yolo_detector import detect_fashion_items
-from models.clip_matcher import embed_image, find_best_match
-from models.vibe_classifier import classify_vibe
+import cv2
 
 app = Flask(__name__)
 UPLOAD_FOLDER = 'uploads'
 os.makedirs(UPLOAD_FOLDER, exist_ok=True)
 
+def extract_frames(video_path, output_folder, max_frames=5):
+    cap = cv2.VideoCapture(video_path)
+    frame_count = 0
+    saved_paths = []
+
+    while cap.isOpened() and frame_count < max_frames:
+        ret, frame = cap.read()
+        if not ret:
+            break
+        frame_path = os.path.join(output_folder, f'frame_{frame_count}.jpg')
+        cv2.imwrite(frame_path, frame)
+        saved_paths.append(frame_path)
+        frame_count += 1
+
+    cap.release()
+    return saved_paths
+
+@app.route('/', methods=['GET'])
+def home():
+    return jsonify({"message": "Upload a video to analyze."})
+
 @app.route('/upload', methods=['POST'])
 def upload_video():
     video = request.files.get('file')
-    if not video:
-        return jsonify({"error": "No video file uploaded"}), 400
+    if video:
+        filename = secure_filename(video.filename)
+        video_path = os.path.join(UPLOAD_FOLDER, filename)
+        video.save(video_path)
 
-    filename = secure_filename(video.filename)
-    video_path = os.path.join(UPLOAD_FOLDER, filename)
-    video.save(video_path)
+        frame_paths = extract_frames(video_path, UPLOAD_FOLDER)
 
-    try:
-        # Step 1: Extract frames
-        frames = extract_frames(video_path)
+        # Simulate fashion tag + vibe prediction
+        results = [
+            {
+                "frame": os.path.basename(p),
+                "fashion_item": "mock_item_" + str(i),
+                "vibe": "casual" if i % 2 == 0 else "edgy"
+            }
+            for i, p in enumerate(frame_paths)
+        ]
 
-        results = []
-        for frame in frames:
-            items = detect_fashion_items(frame)
-            for item in items:
-                embedding = embed_image(item['cropped_image'])
-                matched_product = find_best_match(embedding)
-                vibe = classify_vibe(item['cropped_image'])
+        return jsonify({"status": "success", "results": results})
 
-                results.append({
-                    "label": item['label'],
-                    "bbox": item['bbox'],
-                    "matched_product": matched_product,
-                    "vibe": vibe
-                })
-
-        return jsonify({"results": results})
-    
-    except Exception as e:
-        return jsonify({"error": str(e)}), 500
+    return jsonify({"status": "failed", "message": "No file uploaded."})
 
 if __name__ == '__main__':
     app.run(debug=True)

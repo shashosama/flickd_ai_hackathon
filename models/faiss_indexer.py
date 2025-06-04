@@ -20,11 +20,11 @@ def download_image(url):
     except:
         return None                                                 # return none if download or consversion fails 
 #Generates a CLIP embedding (vector) for a given image 
-def get_clip_embedding(image):                                      #preprocess image for CLIP input 
-    inputs = clip_processor(images=image, return_tensors="pt")      #Preprocess image for CLIP input 
-with torch.no_grad():                                           #Disable gradient tracking for inference
-    embedding = clip_model.get_image_features(**inputs)             #extract image embedding using CLIP 
-return embedding[0].cpu().numpy()                               #convert tensor to numpy array and return
+def get_clip_embedding(image): #preprocess image for CLIP input 
+    inputs = clip_processor(images=image, return_tensors="pt")#Preprocess image for CLIP input 
+    with torch.no_grad():#Disable gradient tracking for inference
+        embedding = clip_model.get_image_features(**inputs) #extract image embedding using CLIP 
+    return embedding[0].cpu().numpy()
 
 #main function to build the FAISS index from the product catalog CSV
 def build_faiss_index(csv_path, output_dir="faiss_index"):

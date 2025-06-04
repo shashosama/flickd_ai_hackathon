@@ -1,5 +1,7 @@
-
 flask
+ultralytics
+transformers
+torch
 opencv-python
 Pillow
 faiss-cpu

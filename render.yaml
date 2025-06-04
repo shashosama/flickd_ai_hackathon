@@ -2,19 +2,19 @@ services:
   - type: web
     name: flickd-backend
     env: python
+    region: oregon
     plan: free
-    buildCommand: pip install -r requirements.txt
-    startCommand: gunicorn app:app
+    buildCommand: "pip install -r requirements.txt"
+    startCommand: "gunicorn app:app"
     envVars:
-      - key: PYTHON_VERSION
-        value: 3.11
+      - key: FLASK_ENV
+        value: production
 
   - type: web
     name: flickd-frontend
     env: static
-    plan: free
-    buildCommand: cd flickd-frontend && npm install && npm run build
-    staticPublishPath: flickd-frontend/dist
-    envVars:
-      - key: NODE_VERSION
-        value: 20
+    buildCommand: "npm install && npm run build"
+    staticPublishPath: dist
+    buildFilter:
+      paths:
+        - frontend/**

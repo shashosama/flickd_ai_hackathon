@@ -1,22 +1,43 @@
 from ultralytics import YOLO
-#import yolo model 
 
+# Load YOLOv8 model (can be replaced with fine-tuned DeepFashion model later)
+model = YOLO("yolov8n.pt")
 
-model = YOLO("yolov8n.pt")  # fallback for now
+# Define relevant fashion classes (adjust as needed based on your YOLO model's output)
+FASHION_CLASSES = {
+    "person", "dress", "handbag", "backpack", "tie", "suitcase", "umbrella",
+    "hat", "jacket", "coat", "scarf", "pants", "shirt", "blouse", "shorts", "skirt", "jeans", "shoe", "sneaker", "boot"
+}
 
-             #loading a pretained model that knows how to detect things like jackets and backets 
+def detect_fashion_items(image_path):
+    """
+    Detect fashion items in an image using YOLOv8.
 
-def detect_fashion_items(image_path):   #Writimg function that takes an image file and looks for clothes or accessories 
-    results = model(image_path)         #Giving the image to YOLO and it returns a bunch of box with guesses of what is in the image
-    detections = []                     #Preparing a empty list 
-    for r in results:                   #iterate through each result (per image)
-        for box in r.boxes:             #Get predicted class name using the class index
-            cls_name = model.names[int(box.cls)]        
-            bbox = box.xywh[0].tolist()              # extract the bound in box format [x_center, y_center, width, height]
-            confidence = float(box.conf[0])          #getting the confidence score (probabilty) of detection
-            detections.append({                      #append the detection details to the output list 
-                "class": cls_name,                   #detected class label   
-                "bbox": bbox,                        #Bounding box coordinates
-                "confidence": confidence             #Confidence score 
+    Args:
+        image_path (str): Path to the image file.
+
+    Returns:
+        List[dict]: List of detections with class, bbox, and confidence.
+    """
+    results = model(image_path)  # Run YOLO inference on the image
+    detections = []
+
+    for r in results:
+        for box in r.boxes:
+            cls_idx = int(box.cls[0])
+            cls_name = model.names[cls_idx]
+
+            # Filter to only fashion-related classes
+            if cls_name.lower() not in FASHION_CLASSES:
+                continue
+
+            bbox = box.xywh[0].tolist()  # [x_center, y_center, width, height]
+            confidence = float(box.conf[0])
+
+            detections.append({
+                "class": cls_name,
+                "bbox": bbox,
+                "confidence": confidence
             })
-    return detections                                #Returns the full list of detected objects with their class labels, bounding boxes, and confidence scores.
+
+    return detections

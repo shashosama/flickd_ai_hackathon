@@ -1,0 +1,12 @@
+streamlit
+ultralytics==8.3.149
+transformers
+torch
+Pillow
+faiss-cpu
+numpy
+pandas
+requests
+gunicorn
+scikit-learn
+opencv-python

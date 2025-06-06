@@ -2,7 +2,9 @@ from ultralytics import YOLO
 #import yolo model 
 
 
-model = YOLO("yolov8n.pt")              #loading a pretained model that knows how to detect things like jackets and backets 
+model = YOLO("yolov8n.pt")  # fallback for now
+
+             #loading a pretained model that knows how to detect things like jackets and backets 
 
 def detect_fashion_items(image_path):   #Writimg function that takes an image file and looks for clothes or accessories 
     results = model(image_path)         #Giving the image to YOLO and it returns a bunch of box with guesses of what is in the image

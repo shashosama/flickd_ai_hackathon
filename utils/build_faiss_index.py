@@ -1,32 +1,20 @@
-import pandas as pd                         #for reading the product catalog CSV 
-import requests                             #for  downloading images from the internet
-from PIL import Image                       #for opening and converting image files 
-import numpy as np                          #for working with arrays of numbers
-import faiss                                #fast library to search for similar images 
-from models.clip_matcher import embed_image # Function to turn image into a CLIP vector
+# build_index.py
 
-def build_index(csv_path="data/product_catalog.csv"):
-    df = pd.read_csv(csv_path)                      #define a function to create a FAISS index from the product catalog CSV 
-    product_ids = df["product_id"].tolist()         #Get a list of all product IDS
-    embeddings = []                                 #This will store the number-code for each image
+import os
+from utils.build_faiss_index import build_index
 
-    for i, row in df.iterrows():                    #Go through each product in the catalog  
-        try:
-            img = Image.open(requests.get(row["image_url"], stream=True).raw).convert("RGB")
-            #Download the product image from the internet
-            emb = embed_image(img)
-            #turn the image into a sepcial set numbers 
-            embeddings.append(emb)
-            #add this images code to our basket 
-        except Exception as e:
-            print(f"Error embedding {row['product_id']}: {e}") #print error if something goes wrong
 
-    embeddings = np.array(embeddings).astype("float32")        #turn list of codes into a big number grid
-    index = faiss.IndexFlatL2(embeddings.shape[1])             #create a FAISS index using euclidean distance 
-    index.add(embeddings)                                      #add all image codes to the smart search box 
+def main():
+    catalog_path = "data/catalog.csv"
 
-    faiss.write_index(index, "data/faiss_index.bin")           #save the smart search box to a file 
-    with open("data/product_ids.txt", "w") as f:               #save the product ID list
-        f.write("\n".join(product_ids))                        #Print debugging message
+    if not os.path.exists(catalog_path):
+        print(f" Catalog file not found at: {catalog_path}")
+        print("Make sure your product CSV exists and is named correctly.")
+        return
 
-    print("FAISS index built and saved.")
+    print(f" Building FAISS index from: {catalog_path}")
+    build_index(catalog_path)
+    print("FAISS index + product_ids.txt saved in /data")
+
+if __name__ == "__main__":
+    main()

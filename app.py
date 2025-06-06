@@ -3,7 +3,7 @@ from werkzeug.utils import secure_filename
 import os
 import cv2
 from main import run_pipeline
-
+from flask_cors import CORS
 app = Flask(__name__)
 UPLOAD_FOLDER = 'uploads'
 os.makedirs(UPLOAD_FOLDER, exist_ok=True)

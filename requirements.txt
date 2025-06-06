@@ -8,4 +8,4 @@ numpy
 pandas
 requests
 gunicorn
-
+flask-cors

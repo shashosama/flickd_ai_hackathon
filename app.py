@@ -8,7 +8,7 @@ from main import run_pipeline
 
 # Extract and return up to 6 preview frames
 def extract_preview_frames(video_path, max_frames=6):
-    extract_frames(video_path, "temp_frames", frame_rate=1)
+    extract_frames(video_path, "temp_frames", seconds_interval=1)
     frames = []
     for i, file in enumerate(sorted(os.listdir("temp_frames"))):
         if i >= max_frames:

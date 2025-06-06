@@ -1,19 +1,28 @@
 import cv2
 import os
 
-def extract_frames(video_path, output_folder, every_n_frames=1):
+def extract_frames(video_path, output_folder, seconds_interval=5):
     os.makedirs(output_folder, exist_ok=True)
-    vidcap = cv2.VideoCapture(video_path)
-    count, frame_id = 0, 0
+
+    cap = cv2.VideoCapture(video_path)
+    fps = cap.get(cv2.CAP_PROP_FPS)
+    if not fps or fps == 0:
+        fps = 30  # fallback if FPS can't be read
+
+    interval = int(fps * seconds_interval)  # frames to skip = fps × seconds
+
+    frame_count = 0
+    saved_count = 0
 
     while True:
-        success, frame = vidcap.read()
-        if not success:
+        ret, frame = cap.read()
+        if not ret:
             break
-        if count % every_n_frames == 0:
-            filename = os.path.join(output_folder, f"frame_{frame_id:03d}.jpg")
+        if frame_count % interval == 0:
+            filename = os.path.join(output_folder, f"frame_{saved_count:03d}.jpg")
             cv2.imwrite(filename, frame)
-            frame_id += 1
-        count += 1
+            saved_count += 1
+        frame_count += 1
 
-    vidcap.release()
+    cap.release()
+    print(f"Saved {saved_count} frames every {seconds_interval} seconds.")

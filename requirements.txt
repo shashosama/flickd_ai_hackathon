@@ -1,6 +1,6 @@
 
-gradio
-ultralytics
+gradio>=4.0
+ultralytics==8.3.149
 torch
 transformers
 opencv-python

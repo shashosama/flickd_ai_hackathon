@@ -21,12 +21,16 @@ def extract_frames(video_path, max_frames=5):
     return frames
 
 def analyze_video(video_file):
-    with NamedTemporaryFile(delete=False, suffix=".mp4") as tmp:
-        tmp.write(video_file.read())
-        tmp_path = tmp.name
+    if isinstance(video_file, str):
+        tmp_path = video_file
+    else:
+        with NamedTemporaryFile(delete=False, suffix=".mp4") as tmp:
+            tmp.write(video_file.read())
+            tmp_path = tmp.name
 
     frame_images = extract_frames(tmp_path)
-    return frame_images  # Returning list of PIL images
+    return frame_images
+
 
 gr.Interface(
     fn=analyze_video,

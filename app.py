@@ -19,9 +19,13 @@ def extract_preview_frames(video_path, max_frames=6):
 
 # Gradio handler
 def analyze_video_gradio(video_file, caption):
-    with NamedTemporaryFile(delete=False, suffix=".mp4") as tmp:
-        tmp.write(video_file.read())
-        video_path = tmp.name
+    # Accept both uploaded binary and file path
+    if isinstance(video_file, str):
+        video_path = video_file
+    else:
+        with NamedTemporaryFile(delete=False, suffix=".mp4") as tmp:
+            tmp.write(video_file.read())
+            video_path = tmp.name
 
     video_id = os.path.splitext(os.path.basename(video_path))[0]
     result = run_pipeline(video_id=video_id, video_path=video_path, caption=caption)

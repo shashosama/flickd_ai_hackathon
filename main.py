@@ -49,11 +49,12 @@ def run_pipeline(video_id, video_path, caption):
             crop_img = Image.fromarray(crop)
             emb = embed_image(crop_img)
             match_type, prod_id, score = find_best_match(emb, index, product_ids)
+            print(f"[DEBUG] Match for {det['class']}: Score = {score:.3f}, Type = {match_type}, Product ID = {prod_id}")
+
 
             print(f"Matching {det['class']} – Top product: {prod_id} (score: {score:.3f})")
 
-            # Save debug crop
-            crop_img.save(f"debug_crops/{video_id}_{frame_file.stem}_{det['class']}.jpg")
+            
 
             if score < 0.75:
                 continue

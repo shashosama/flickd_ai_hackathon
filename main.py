@@ -32,32 +32,40 @@ def run_pipeline(video_id, video_path, caption):
     products = []
 
     # Step 3: Detect fashion items in each frame
+    os.makedirs("debug_crops", exist_ok=True)  # Create folder once
+
     for frame_file in Path(frame_dir).glob("*.jpg"):
         detections = detect_fashion_items(str(frame_file))
-        img = cv2.imread(str(frame_file))
+    img = cv2.imread(str(frame_file))
 
-        for det in detections:
-            x, y, w, h = map(int, det["bbox"])
-            x1, y1 = max(x - w // 2, 0), max(y - h // 2, 0)
-            x2, y2 = x1 + w, y1 + h
-            crop = img[y1:y2, x1:x2]
+    for det in detections:
+        x, y, w, h = map(int, det["bbox"])
+        x1, y1 = max(x - w // 2, 0), max(y - h // 2, 0)
+        x2, y2 = x1 + w, y1 + h
+        crop = img[y1:y2, x1:x2]
 
-            if crop.size == 0:
-                continue
+        if crop.size == 0:
+            continue
 
-            crop_img = Image.fromarray(crop)
-            emb = embed_image(crop_img)
-            match_type, prod_id, score = find_best_match(emb, index, product_ids)
+        crop_img = Image.fromarray(crop)
+        emb = embed_image(crop_img)
+        match_type, prod_id, score = find_best_match(emb, index, product_ids)
 
-            if score < 0.75:
-                continue
+        print(f"Matching {det['class']} – Top product: {prod_id} (score: {score:.3f})")
 
-            products.append({
-                "type": det["class"],
-                "match_type": match_type,
-                "matched_product_id": prod_id,
-                "confidence": round(float(score), 3)
-            })
+        # Save the crop with class name for visual debugging
+        crop_img.save(f"debug_crops/{video_id}_{frame_file.stem}_{det['class']}.jpg")
+
+        if score < 0.75:
+            continue
+
+        products.append({
+            "type": det["class"],
+            "match_type": match_type,
+            "matched_product_id": prod_id,
+            "confidence": round(float(score), 3)
+        })
+
 
     # Step 4: Classify vibes
     caption = caption if caption.strip() else "fashion style"

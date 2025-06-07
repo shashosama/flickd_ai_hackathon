@@ -1,7 +1,7 @@
 from ultralytics import YOLO
 
 # Load the YOLO model once
-model = YOLO("models/yolov8.pt")
+model = YOLO("models/yolov8_deepfashion.pt")
 
 FASHION_CLASSES = {
     "person","dress", "handbag", "backpack", "tie", "suitcase", "umbrella",

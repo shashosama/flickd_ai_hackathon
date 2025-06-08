@@ -35,15 +35,15 @@ The project runs via a Python backend (Gradio or Streamlit UI) and is deployable
 
 ```
 flikd-ai-hackathon/
-├── app.py                 # Frontend (Gradio or Streamlit)
-├── main.py                # Core pipeline
+├── app.py         # Frontend (Gradio or Streamlit)
+├── main.py           # Core pipeline
 ├── utils/
-│   ├── frame_utils.py     # Frame extraction
-│   ├── detection.py       # YOLOv8 wrapper
-│   ├── clip_matcher.py    # CLIP + FAISS logic
+│   ├── frame_utils.py   # Frame extraction
+│   ├── detection.py    # YOLOv8 wrapper
+│   ├── clip_matcher.py   # CLIP + FAISS logic
 │   └── vibe_classifier.py # Style classification
-├── outputs/               # Output images + JSON
-├── product_db/            # Product embeddings
+├── outputs/            # Output images + JSON
+├── product_db/     # Product embeddings
 ├── requirements.txt
 └── README.Rmd
 ```

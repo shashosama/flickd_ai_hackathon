@@ -3,13 +3,15 @@
 
 # Flickd AI Hackathon - Fashion Video Intelligence Engine
 
-## Overview
 
-This project was developed for the Flickd AI Hackathon. It focuses on analyzing fashion videos to detect clothing items, match them to products, and classify the style or “vibe” of the outfit. It combines computer vision and natural language processing to create a smart fashion insight tool.
 
 ## Problem Statement
 
 In the world of online fashion and short videos, it’s difficult to identify and retrieve exact outfit items seen in influencer clips or fashion reels. This creates friction for users and limits opportunities for retail platforms.
+
+## Solution
+
+This project was developed for the Flickd AI Hackathon. It focuses on analyzing fashion videos to detect clothing items, match them to products, and classify the style or “vibe” of the outfit. It combines computer vision and natural language processing to create a smart fashion insight tool.
 
 ### Key Challenges:
 

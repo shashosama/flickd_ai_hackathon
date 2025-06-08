@@ -1,8 +1,5 @@
 
----
-title: "Flickd AI Hackathon - Fashion Video Intelligence Engine"
-output: github_document
----
+
 
 # Flickd AI Hackathon - Fashion Video Intelligence Engine
 

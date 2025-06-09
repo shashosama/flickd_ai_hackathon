@@ -1,8 +1,8 @@
-import pandas as pd                              #for reading CSV data
-import requests                                  #for downloading images from URL 
-from io import BytesIO                           #for handling in-mi=emory binary streams 
-from PIL import Image                            #for opening and processing images
-import torch                                     #for using Pytorch - based CLIP model 
+import pandas as pd                          #for reading CSV data
+import requests                             #for downloading images from URL 
+from io import BytesIO                        #for handling in-mi=emory binary streams 
+from PIL import Image                       #for opening and processing images
+import torch                                   #for using Pytorch - based CLIP model 
 import numpy as np                               #for numerical operations and array hand 
 import faiss                                     #Facebook AI similarity search 
 from transformers import CLIPProcessor, CLIPModel#Hugging face CLip model 

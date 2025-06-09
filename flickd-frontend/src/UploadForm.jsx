@@ -30,7 +30,7 @@ function UploadForm() {
 
   return (
     <div style={{ padding: '20px' }}>
-      <h2>🎥 Upload Fashion Video</h2>
+      <h2> Upload Fashion Video</h2>
       <form onSubmit={handleUpload}>
         <input
           type="file"
